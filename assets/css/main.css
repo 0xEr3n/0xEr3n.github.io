@@ -1,0 +1,890 @@
+/* =============================================================================
+   VARIABLES
+   ============================================================================= */
+:root {
+  --bg:           #0f0f0f;
+  --bg-card:      #181818;
+  --bg-code:      #1c1c1c;
+  --bg-code-hdr:  #1f1f1f;
+  --text:         #cccccc;
+  --text-muted:   #888888;
+  --text-heading: #ffffff;
+  --accent:       #4ec9b0;
+  --accent-dim:   rgba(78, 201, 176, 0.12);
+  --border:       #2a2a2a;
+
+  --font: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Source Code Pro',
+          Menlo, Monaco, Consolas, monospace;
+
+  --max-content:  680px;
+  --max-post:     720px;
+  --toc-width:    200px;
+}
+
+
+/* =============================================================================
+   RESET
+   ============================================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+img, svg { display: block; max-width: 100%; }
+
+
+/* =============================================================================
+   BASE
+   ============================================================================= */
+html {
+  font-size: 17px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background:  var(--bg);
+  color:       var(--text);
+  font-family: var(--font);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+a:hover { color: var(--accent); }
+
+/* shared max-width wrapper */
+.wrapper {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+
+/* =============================================================================
+   HEADER
+   ============================================================================= */
+.site-header {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 3.5rem;
+}
+
+.header-inner {
+  max-width: calc(var(--max-post) + var(--toc-width) + 5rem);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Stacked icon container — both images sit on top of each other */
+.logo-wrap {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.site-logo:hover .logo-wrap {
+  transform: scale(1.18);
+}
+
+.logo-img,
+.logo-img-hover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  transition: opacity 0.35s ease;
+}
+
+/* default icon visible, hover icon hidden */
+.logo-img       { opacity: 1; }
+.logo-img-hover { opacity: 0; }
+
+/* on hover: swap them */
+.site-logo:hover .logo-img       { opacity: 0; }
+.site-logo:hover .logo-img-hover { opacity: 1; }
+
+.site-nav a {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-left: 1.75rem;
+}
+.site-nav a:hover,
+.site-nav a.active { color: var(--text); }
+
+
+/* =============================================================================
+   FOOTER
+   ============================================================================= */
+.site-footer {
+  margin-top: 6rem;
+  padding: 1.5rem 0 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.footer-inner { max-width: var(--max-content); margin: 0 auto; }
+.site-footer p { font-size: 0.75rem; color: var(--text-muted); }
+.site-footer a { color: var(--text-muted); }
+.site-footer a:hover { color: var(--accent); }
+
+
+/* =============================================================================
+   HOMEPAGE
+   ============================================================================= */
+.home {
+  padding-top: 3.5rem;
+  padding-bottom: 2rem;
+}
+
+/* Hero block */
+.hero {
+  margin-bottom: 4.5rem;
+}
+
+.hero-name {
+  font-size: 2.1rem;
+  font-weight: 500;
+  color: var(--text-heading);
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.hero-tagline {
+  font-size: 0.97rem;
+  color: #aaaaaa;
+  margin-bottom: 1.75rem;
+  line-height: 1.6;
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.find-me-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-right: 0.1rem;
+}
+
+.social-link {
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+.social-link:hover { color: var(--accent); }
+
+.social-icon {
+  width: 19px;
+  height: 19px;
+  display: block;
+}
+
+.social-sep {
+  color: var(--border);
+  font-size: 0.85rem;
+  user-select: none;
+  line-height: 1;
+}
+
+/* Section label */
+.section-label {
+  font-size: 1.45rem;
+  font-weight: 500;
+  color: var(--text-heading);
+  letter-spacing: -0.01em;
+  margin-bottom: 1.1rem;
+  display: inline-block;
+}
+.section-label a {
+  color: inherit;
+}
+.section-label a:hover {
+  color: var(--accent);
+}
+
+/* Post list (shared between home and posts page) */
+.post-list {
+  list-style: none;
+  margin-bottom: 1.5rem;
+}
+
+.post-item {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+  padding: 0.3rem 0;
+}
+
+.post-date {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.post-link {
+  color: var(--text-heading);
+  font-size: 0.88rem;
+}
+.post-link:hover { color: var(--accent); }
+
+/* Homepage recent posts — same effect as "Writings": white → teal on hover */
+.home .post-link {
+  font-size: 1rem;
+  color: var(--text-heading);
+  transition: color 0.15s;
+}
+.home .post-link:hover { color: var(--accent); }
+
+.home .post-date {
+  font-size: 0.82rem;
+  color: #666666;
+}
+
+.view-all {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: inline-block;
+  margin-top: 0.25rem;
+}
+.view-all:hover { color: var(--accent); }
+
+
+/* =============================================================================
+   POSTS LISTING PAGE
+   ============================================================================= */
+.posts-page {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--text-heading);
+  margin-bottom: 3rem;
+}
+
+.year-group {
+  margin-bottom: 3rem;
+}
+
+.year-label {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.75rem;
+}
+
+/* Full-width post list rows */
+.post-list.full .post-item {
+  gap: 1.5rem;
+  padding: 0.45rem 0;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid transparent;
+}
+
+.post-list.full .post-link {
+  color: var(--text);
+  font-size: 0.88rem;
+}
+.post-list.full .post-link:hover { color: var(--accent); }
+
+/* The → arrow that appears on hover */
+.post-arrow {
+  display: inline-block;
+  margin-left: 0.3rem;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.15s, transform 0.15s;
+  color: var(--accent);
+}
+.post-link:hover .post-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Inline tag chips */
+.post-tags-inline {
+  display: flex;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.tag {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+
+/* =============================================================================
+   POST LAYOUT (article + TOC sidebar)
+   ============================================================================= */
+.post-container {
+  display: grid;
+  grid-template-columns: var(--max-post) var(--toc-width);
+  gap: 4rem;
+  max-width: calc(var(--max-post) + var(--toc-width) + 4rem);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  align-items: start;
+}
+
+/* === Post header === */
+.post-header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-title {
+  font-size: 1.55rem;
+  font-weight: 500;
+  color: var(--text-heading);
+  line-height: 1.4;
+  margin-bottom: 0.8rem;
+  letter-spacing: -0.02em;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.meta-sep { color: var(--border); }
+
+.post-tags { display: flex; gap: 0.35rem; }
+
+/* === Post body typography === */
+.post-content {
+  font-size: 0.93rem;
+  line-height: 1.85;
+}
+
+.post-content p { margin-bottom: 1.25rem; }
+
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+  color: var(--text-heading);
+  margin: 2.5rem 0 0.9rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.post-content h2 {
+  font-size: 1.1rem;
+  padding-left: 0.65rem;
+  border-left: 2px solid var(--accent);
+}
+
+.post-content h3 {
+  font-size: 0.97rem;
+  color: #dddddd;
+}
+
+.post-content h4 { font-size: 0.93rem; color: #bbbbbb; }
+
+.post-content ul,
+.post-content ol {
+  margin: 0.75rem 0 1.25rem 1.4rem;
+}
+.post-content li { margin-bottom: 0.35rem; }
+
+/* Inline code */
+.post-content code {
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.875em;
+  font-family: var(--font);
+}
+
+/* === Code blocks === */
+/* Rouge wraps: <div class="language-X highlighter-rouge"><div class="highlight"><pre>... */
+.highlighter-rouge {
+  margin: 1.5rem 0;
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);   /* accent top stripe — shows it's a code block */
+  background: var(--bg-code);
+}
+
+/* Strip inline-code styling inside code blocks */
+.highlighter-rouge code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Code header injected by copy-code.js — dots · lang · copy */
+.code-header {
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 0.9rem;
+  background: var(--bg-code-hdr);
+  border-bottom: 1px solid var(--border);
+  gap: 0.75rem;
+}
+
+/* macOS-style window dots */
+.code-dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.code-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #333;
+  transition: background 0.15s;
+}
+.highlighter-rouge:hover .code-dot:nth-child(1) { background: #ff5f57; }
+.highlighter-rouge:hover .code-dot:nth-child(2) { background: #febc2e; }
+.highlighter-rouge:hover .code-dot:nth-child(3) { background: #28c840; }
+
+/* Language label centred in the bar */
+.code-lang {
+  flex: 1;
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--accent);
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+}
+
+/* Copy button */
+.copy-btn {
+  background: transparent;
+  border: 1px solid #333;
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-size: 0.68rem;
+  padding: 0.18rem 0.6rem;
+  border-radius: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.copy-btn:hover  { border-color: var(--accent); color: var(--accent); }
+.copy-btn.copied {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* The <pre> itself */
+.highlight {
+  background: var(--bg-code) !important;
+  overflow-x: auto;
+}
+.highlight pre {
+  margin: 0;
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+  white-space: pre;     /* never wrap */
+  font-size: 0.83rem;
+  line-height: 1.65;
+  color: #f8f8f2;
+}
+
+/* === Blockquotes === */
+.post-content blockquote {
+  margin: 1.5rem 0;
+  padding: 0.65rem 1.25rem;
+  border-left: 3px solid var(--accent);
+  font-style: italic;
+  color: var(--text-muted);
+}
+.post-content blockquote p { margin: 0; }
+
+/* === Tables === */
+.post-content table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.85rem;
+}
+.post-content th {
+  text-align: left;
+  padding: 0.55rem 0.85rem;
+  border-bottom: 1px solid var(--accent);
+  color: var(--accent);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.post-content td {
+  padding: 0.5rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.post-content tr:last-child td { border-bottom: none; }
+.post-content tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* === Post footer === */
+.post-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.back-link {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.back-link:hover { color: var(--accent); }
+
+
+/* =============================================================================
+   TABLE OF CONTENTS (sidebar)
+   ============================================================================= */
+.toc-sidebar {
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+}
+
+.toc {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-card);
+}
+
+.toc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+
+.toc-header {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.toc-toggle,
+.toc-subtoggle {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.toc-toggle {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.14rem 0.4rem;
+}
+
+.toc-toggle:hover,
+.toc-subtoggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.toc-list {
+  list-style: none;
+}
+
+.toc-list li {
+  margin-bottom: 0.35rem;
+  line-height: 1.4;
+}
+
+.toc-list a {
+  font-size: 0.77rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.toc-list a:hover,
+.toc-list a.active { color: var(--accent); }
+
+.toc-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.toc-subtoggle {
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.toc-sublist {
+  list-style: none;
+}
+
+.toc-h3 { padding-left: 0.75rem; }
+.toc-h3 a { font-size: 0.73rem; }
+
+.toc-h1 a { font-size: 0.8rem; font-weight: 500; }
+
+
+/* =============================================================================
+   PAGE (about, etc.)
+   ============================================================================= */
+.page-content {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+.page-content .page-title {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--text-heading);
+  margin-bottom: 2rem;
+}
+.page-content p {
+  margin-bottom: 1.25rem;
+  line-height: 1.85;
+  font-size: 0.93rem;
+}
+.page-content h2 {
+  font-size: 1rem;
+  color: var(--text-heading);
+  margin: 2rem 0 0.75rem;
+  padding-left: 0.65rem;
+  border-left: 2px solid var(--accent);
+}
+.page-content a { color: var(--accent); }
+.page-content a:hover { opacity: 0.8; }
+
+
+/* =============================================================================
+   404 PAGE
+   ============================================================================= */
+.not-found {
+  padding-top: 6rem;
+  text-align: center;
+}
+.not-found-code {
+  font-size: 5rem;
+  font-weight: 500;
+  color: var(--text-heading);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.not-found-msg {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+
+/* =============================================================================
+   IMAGES — hover zoom (like s1r1us.ninja)
+   ============================================================================= */
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  display: block;
+  margin: 1.75rem auto;
+  border: 1px solid var(--border);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.35s ease;
+  position: relative;
+  z-index: 1;
+}
+.post-content img:hover {
+  transform: scale(1.045);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.75);
+  z-index: 10;
+}
+
+/* Caption: italicised paragraph immediately after an image */
+.post-content img + em,
+.post-content p > img ~ em {
+  display: block;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: -1rem;
+  margin-bottom: 1.5rem;
+}
+
+
+/* =============================================================================
+   TAGS PAGE  (/tags)
+   ============================================================================= */
+.tags-page {
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+/* Tag cloud at the top */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tag-cloud-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.tag-cloud-item:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.tag-count {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* Per-tag group */
+.tag-group {
+  margin-bottom: 2.5rem;
+  scroll-margin-top: 2rem;  /* so anchor links clear the header */
+}
+
+.tag-group-heading {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Make [tag] chips in posts/listings clickable */
+a.tag {
+  transition: color 0.15s;
+}
+a.tag:hover { color: var(--accent); }
+
+
+/* =============================================================================
+   ROUGE SYNTAX — MONOKAI THEME
+   ============================================================================= */
+.highlight .c,  .highlight .cm, .highlight .cp,
+.highlight .c1, .highlight .cs { color: #75715e; font-style: italic; } /* Comment */
+.highlight .err { color: #f92672; }
+.highlight .k,  .highlight .kc, .highlight .kd,
+.highlight .kr  { color: #66d9ef; }          /* Keyword */
+.highlight .kn  { color: #f92672; }          /* Keyword.Namespace (import) */
+.highlight .kp  { color: #66d9ef; }
+.highlight .kt  { color: #66d9ef; }          /* Type */
+.highlight .n               { color: #f8f8f2; }
+.highlight .na              { color: #a6e22e; } /* Attr */
+.highlight .nb              { color: #f8f8f2; }
+.highlight .nc              { color: #a6e22e; } /* Class name */
+.highlight .nd              { color: #a6e22e; } /* Decorator */
+.highlight .ne              { color: #a6e22e; } /* Exception */
+.highlight .nf              { color: #a6e22e; } /* Function */
+.highlight .nn              { color: #f8f8f2; }
+.highlight .nt              { color: #f92672; } /* Tag (HTML) */
+.highlight .nv              { color: #f8f8f2; }
+.highlight .o, .highlight .ow { color: #f92672; } /* Operator */
+.highlight .p               { color: #f8f8f2; }
+.highlight .s,  .highlight .s1, .highlight .s2,
+.highlight .sb, .highlight .sc, .highlight .sd,
+.highlight .sh, .highlight .si, .highlight .sx,
+.highlight .sr, .highlight .ss { color: #e6db74; } /* String */
+.highlight .se              { color: #ae81ff; }    /* String.Escape */
+.highlight .m,  .highlight .mf, .highlight .mh,
+.highlight .mi, .highlight .mo, .highlight .il { color: #ae81ff; } /* Number */
+.highlight .l,  .highlight .ld { color: #ae81ff; }
+.highlight .gd              { color: #f92672; }   /* diff removed */
+.highlight .gi              { color: #a6e22e; }   /* diff added */
+.highlight .gu              { color: #75715e; }
+.highlight .ge              { font-style: italic; }
+.highlight .gs              { font-weight: bold; }
+
+
+/* =============================================================================
+   RESPONSIVE
+   ============================================================================= */
+
+/* Collapse TOC sidebar on anything narrower than post+toc */
+@media (max-width: 980px) {
+  .post-container {
+    grid-template-columns: 1fr;
+    max-width: var(--max-post);
+    gap: 0;
+  }
+  .toc-sidebar { display: none; }
+}
+
+@media (max-width: 640px) {
+  html { font-size: 15px; }
+
+  .site-header { margin-bottom: 2.5rem; }
+
+  .hero-name { font-size: 1.6rem; }
+  .home { padding-top: 2rem; }
+
+  .post-title { font-size: 1.25rem; }
+
+  /* Stack date + title vertically on tiny screens */
+  .post-list.full .post-item {
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+}

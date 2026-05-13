@@ -1,0 +1,36 @@
+---
+layout: default
+---
+
+<div class="tags-page wrapper">
+  <h1 class="page-title">tags</h1>
+
+  {% assign tags_sorted = site.tags | sort %}
+
+  <!-- Tag cloud: all tags at the top as clickable anchors -->
+  <div class="tag-cloud">
+    {% for tag in tags_sorted %}
+      <a href="#{{ tag[0] | slugify }}" class="tag-cloud-item">
+        [{{ tag[0] }}]<span class="tag-count">{{ tag[1].size }}</span>
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Posts grouped by tag -->
+  {% for tag in tags_sorted %}
+    <div class="tag-group" id="{{ tag[0] | slugify }}">
+      <h2 class="tag-group-heading">[{{ tag[0] }}]</h2>
+      <ul class="post-list">
+        {% assign tag_posts = tag[1] | sort: 'date' | reverse %}
+        {% for post in tag_posts %}
+          <li class="post-item">
+            <span class="post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+            <a href="{{ post.url | relative_url }}" class="post-link">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+
+  {{ content }}
+</div>

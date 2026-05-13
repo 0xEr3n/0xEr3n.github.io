@@ -1,0 +1,236 @@
+<nav class="toc" id="toc" aria-label="Table of contents">
+  <div class="toc-top">
+    <p class="toc-header">contents</p>
+    <button class="toc-toggle" id="toc-toggle" type="button" aria-expanded="true" aria-controls="toc-list">collapse</button>
+  </div>
+  <ul class="toc-list" id="toc-list"></ul>
+</nav>
+
+<script>
+(function () {
+  var content = document.querySelector('.post-content');
+  var list    = document.getElementById('toc-list');
+  var toc     = document.getElementById('toc');
+  var tocToggle = document.getElementById('toc-toggle');
+  if (!content || !list || !toc || !tocToggle) return;
+
+  var headings = content.querySelectorAll('h1, h2, h3');
+  if (headings.length < 1) { toc.style.display = 'none'; return; }
+
+  var blocks = [];
+  var current = null;
+
+  headings.forEach(function (heading) {
+    if (heading.tagName === 'H1') {
+      current = { h1: heading, h2: [] };
+      blocks.push(current);
+      return;
+    }
+
+    if (heading.tagName === 'H2') {
+      if (!current) {
+        current = { h1: null, h2: [] };
+        blocks.push(current);
+      }
+      current.h2.push({ h2: heading, h3: [] });
+      return;
+    }
+
+    if (heading.tagName === 'H3') {
+      if (!current || current.h2.length === 0) {
+        if (!current) {
+          current = { h1: null, h2: [] };
+          blocks.push(current);
+        }
+        current.h2.push({ h2: null, h3: [] });
+      }
+      current.h2[current.h2.length - 1].h3.push(heading);
+      return;
+    }
+  });
+
+  function makeLink(heading, index) {
+    if (!heading.id) heading.id = 'h-' + index;
+
+    var link = document.createElement('a');
+    link.href = '#' + heading.id;
+    link.textContent = heading.textContent;
+
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById(heading.id).scrollIntoView({ behavior: 'smooth' });
+      history.pushState(null, '', '#' + heading.id);
+    });
+
+    return link;
+  }
+
+  var headingIndex = 0;
+  blocks.forEach(function (block) {
+    // Render H1 if it exists
+    if (block.h1) {
+      var h1Item = document.createElement('li');
+      h1Item.className = 'toc-h1';
+
+      var h1Row = document.createElement('div');
+      h1Row.className = 'toc-item-row';
+
+      var h1Link = makeLink(block.h1, headingIndex++);
+      h1Row.appendChild(h1Link);
+
+      if (block.h2.length > 0) {
+        var h1Toggle = document.createElement('button');
+        h1Toggle.type = 'button';
+        h1Toggle.className = 'toc-subtoggle';
+        h1Toggle.setAttribute('aria-expanded', 'true');
+        h1Toggle.textContent = '−';
+        h1Row.appendChild(h1Toggle);
+
+        var h1Sublist = document.createElement('ul');
+        h1Sublist.className = 'toc-sublist';
+
+        // Render H2s under this H1
+        block.h2.forEach(function (h2Block) {
+          if (h2Block.h2) {
+            var h2Item = document.createElement('li');
+            h2Item.className = 'toc-h2';
+
+            var h2Row = document.createElement('div');
+            h2Row.className = 'toc-item-row';
+
+            var h2Link = makeLink(h2Block.h2, headingIndex++);
+            h2Row.appendChild(h2Link);
+
+            if (h2Block.h3.length > 0) {
+              var h2Toggle = document.createElement('button');
+              h2Toggle.type = 'button';
+              h2Toggle.className = 'toc-subtoggle';
+              h2Toggle.setAttribute('aria-expanded', 'true');
+              h2Toggle.textContent = '−';
+              h2Row.appendChild(h2Toggle);
+
+              var h2Sublist = document.createElement('ul');
+              h2Sublist.className = 'toc-sublist';
+
+              h2Block.h3.forEach(function (h3) {
+                var h3Item = document.createElement('li');
+                h3Item.className = 'toc-h3';
+                h3Item.appendChild(makeLink(h3, headingIndex++));
+                h2Sublist.appendChild(h3Item);
+              });
+
+              h2Toggle.addEventListener('click', function () {
+                var expanded = h2Toggle.getAttribute('aria-expanded') === 'true';
+                h2Toggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+                h2Toggle.textContent = expanded ? '+' : '−';
+                h2Sublist.hidden = expanded;
+              });
+
+              h2Item.appendChild(h2Row);
+              h2Item.appendChild(h2Sublist);
+              h1Sublist.appendChild(h2Item);
+            } else {
+              h2Item.appendChild(h2Row);
+              h1Sublist.appendChild(h2Item);
+            }
+          }
+        });
+
+        h1Toggle.addEventListener('click', function () {
+          var expanded = h1Toggle.getAttribute('aria-expanded') === 'true';
+          h1Toggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+          h1Toggle.textContent = expanded ? '+' : '−';
+          h1Sublist.hidden = expanded;
+        });
+
+        h1Item.appendChild(h1Row);
+        h1Item.appendChild(h1Sublist);
+        list.appendChild(h1Item);
+      } else {
+        h1Item.appendChild(h1Row);
+        list.appendChild(h1Item);
+      }
+    } else {
+      // No H1, render H2s directly
+      block.h2.forEach(function (h2Block) {
+        var h2Item = document.createElement('li');
+        h2Item.className = 'toc-h2';
+
+        var h2Row = document.createElement('div');
+        h2Row.className = 'toc-item-row';
+
+        if (h2Block.h2) {
+          var h2Link = makeLink(h2Block.h2, headingIndex++);
+          h2Row.appendChild(h2Link);
+        }
+
+        if (h2Block.h3.length > 0) {
+          var h2Toggle = document.createElement('button');
+          h2Toggle.type = 'button';
+          h2Toggle.className = 'toc-subtoggle';
+          h2Toggle.setAttribute('aria-expanded', 'true');
+          h2Toggle.textContent = '−';
+          h2Row.appendChild(h2Toggle);
+
+          var h2Sublist = document.createElement('ul');
+          h2Sublist.className = 'toc-sublist';
+
+          h2Block.h3.forEach(function (h3) {
+            var h3Item = document.createElement('li');
+            h3Item.className = 'toc-h3';
+            h3Item.appendChild(makeLink(h3, headingIndex++));
+            h2Sublist.appendChild(h3Item);
+          });
+
+          h2Toggle.addEventListener('click', function () {
+            var expanded = h2Toggle.getAttribute('aria-expanded') === 'true';
+            h2Toggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+            h2Toggle.textContent = expanded ? '+' : '−';
+            h2Sublist.hidden = expanded;
+          });
+
+          h2Item.appendChild(h2Row);
+          h2Item.appendChild(h2Sublist);
+          list.appendChild(h2Item);
+        } else {
+          h2Item.appendChild(h2Row);
+          list.appendChild(h2Item);
+        }
+      });
+    }
+  });
+
+  tocToggle.addEventListener('click', function () {
+    var expanded = tocToggle.getAttribute('aria-expanded') === 'true';
+    tocToggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    tocToggle.textContent = expanded ? 'expand' : 'collapse';
+    
+    // Hide/show all sublist items, but keep top-level items visible
+    var sublists = list.querySelectorAll('.toc-sublist');
+    var subToggles = list.querySelectorAll('.toc-subtoggle');
+    
+    sublists.forEach(function (sublist) {
+      sublist.hidden = expanded;
+    });
+    
+    subToggles.forEach(function (btn) {
+      btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      btn.textContent = expanded ? '+' : '−';
+    });
+  });
+
+  /* Highlight active heading on scroll */
+  var links = list.querySelectorAll('a');
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        links.forEach(function (l) { l.classList.remove('active'); });
+        var active = list.querySelector('a[href="#' + entry.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '0px 0px -80% 0px' });
+
+  headings.forEach(function (h) { observer.observe(h); });
+})();
+</script>

@@ -1,0 +1,40 @@
+title: "0xEr3n"
+tagline: "security researcher. CTF addict."
+description: "bloggg"
+
+# Change these before deploying
+url: "https://er3n.me"
+baseurl: ""  # empty for username.github.io, /repo-name for project pages
+
+author:
+  name: "0xEr3n"
+  email: "manu.shriyansh@gmail.com"
+  github: "0xEr3n"
+  twitter: "0xEr3n"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+permalink: /posts/:title/
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+    block:
+      line_numbers: false
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+feed:
+  path: feed.xml
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor/
+  - .bundle/

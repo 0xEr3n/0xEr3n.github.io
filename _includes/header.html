@@ -1,0 +1,15 @@
+<header class="site-header">
+  <div class="header-inner">
+    <a href="{{ '/' | relative_url }}" class="site-logo" aria-label="0xEr3n — home">
+      <div class="logo-wrap">
+        <img src="{{ '/assets/img/icon-default.png' | relative_url }}" alt="0xEr3n" class="logo-img">
+        <img src="{{ '/assets/img/icon-hover.png' | relative_url }}" alt="" class="logo-img-hover" aria-hidden="true">
+      </div>
+    </a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="{{ '/posts' | relative_url }}"{% if page.url contains '/posts' %} class="active"{% endif %}>posts</a>
+      <a href="{{ '/tags' | relative_url }}"{% if page.url contains '/tags' %} class="active"{% endif %}>tags</a>
+      <a href="{{ '/about' | relative_url }}"{% if page.url == '/about/' or page.url == '/about' %} class="active"{% endif %}>about</a>
+    </nav>
+  </div>
+</header>
