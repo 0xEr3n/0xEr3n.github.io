@@ -1,43 +1,94 @@
 <meta charset="utf-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 {% if page.title %}
-  <title>{{ page.title }} — {{ site.title }}</title>
+ <title>{{ page.title }} — {{ site.title }}</title>
+
 {% else %}
-  <title>{{ site.title }}</title>
+
+ <title>{{ site.title }}</title>
+
 {% endif %}
 
 <meta name="description" content="{% if page.description %}{{ page.description }}{% elsif page.excerpt %}{{ page.excerpt | strip_html | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 
 <!-- Open Graph -->
+
 <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
 <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+
 <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+
 <meta property="og:url" content="{{ page.url | absolute_url }}">
+
 <meta property="og:site_name" content="{{ site.title }}">
 
 <!-- Twitter -->
+
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+
 <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+
 {% if site.author.twitter %}
-  <meta name="twitter:creator" content="@{{ site.author.twitter }}">
+
+ <meta name="twitter:creator" content="@{{ site.author.twitter }}">
+
 {% endif %}
 
 <!-- Canonical -->
+
 <link rel="canonical" href="{{ page.url | absolute_url }}">
 
 <!-- RSS -->
 <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | absolute_url }}">
 
 <!-- Fonts: JetBrains Mono from Google Fonts -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" href="{{ '/assets/img/favicon.png' | relative_url }}">
+
 <link rel="apple-touch-icon" href="{{ '/assets/img/favicon.png' | relative_url }}">
 
 <!-- Styles -->
+
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+
+<!-- UXCam Web SDK -->
+<script type="text/javascript" defer="">
+(function( appKey, opts ) {
+	window.uxc = {
+		__t: [],
+		__ak: appKey,
+		__o: opts,
+		event: function( n, p ) {
+			this.__t.push( [ 'event', n, p ] )
+		},
+		setUserIdentity: function( i ) {
+			this.__t.push( [ 'setUserIdentity', i ] )
+		},
+		setUserProperty: function( k, v ) {
+			this.__t.push( [ 'setUserProperty', k, v ] )
+		},
+		setUserProperties: function( p ) {
+			this.__t.push( [ 'setUserProperties', p ] )
+		},
+	};
+	var head = document.getElementsByTagName('head')[0];
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = 'https://websdk-recording.uxcam.com/index.js';
+	script.async = true;
+	script.defer = true;
+	script.id = 'uxcam-web-sdk';
+	script.crossOrigin = 'anonymous';
+	head.appendChild(script);
+} )( 'vyhpn9tzpcd1k5m-us', {} );
+</script>
